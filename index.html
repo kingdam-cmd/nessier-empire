@@ -135,6 +135,12 @@ h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;line-hei
 .card:hover .imgwrap img{transform:scale(1.045)}
 .card .badge{position:absolute;top:12px;left:12px;background:var(--ink);color:#fff;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:999px}
 .card .badge.new{background:var(--pink)}
+.card .badge.sale{background:var(--pink-deep);top:12px;left:12px}
+.card .badge.sale.stack{top:40px}
+.card .was{color:var(--muted);text-decoration:line-through;font-weight:500;margin-right:7px}
+.card .now{color:var(--pink-deep);font-weight:700}
+.card .timer{display:inline-flex;align-items:center;gap:5px;margin-top:5px;font-size:11px;font-weight:600;color:var(--pink-deep);letter-spacing:.02em}
+.card .timer svg{width:12px;height:12px}
 .card .quick{position:absolute;left:12px;right:12px;bottom:12px;opacity:0;transform:translateY(8px);transition:.2s;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-radius:999px;padding:11px;text-align:center;font-size:13px;font-weight:600;color:var(--ink)}
 .card:hover .quick{opacity:1;transform:none}
 .card .meta{padding:13px 2px 0}
@@ -213,6 +219,40 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
 .pd-info .cat{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--olive);font-weight:600}
 .pd-info h2{font-size:38px;margin:8px 0 10px;line-height:1}
 .pd-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--pink-deep)}
+.pd-price .was{font-size:22px;color:var(--muted);text-decoration:line-through;margin-right:10px;font-weight:500}
+.pd-sale{display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:var(--blush);color:var(--pink-deep);font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:7px 12px;border-radius:999px}
+.pd-sale svg{width:14px;height:14px}
+.flashstrip{background:linear-gradient(90deg,var(--pink-deep),var(--pink));color:#fff;text-align:center;padding:9px 16px;font-size:12.5px;letter-spacing:.06em;font-weight:600;display:none;align-items:center;justify-content:center;gap:10px}
+.flashstrip.show{display:flex}
+.flashstrip b{font-variant-numeric:tabular-nums}
+/* order success + tracking */
+.ok-check{width:66px;height:66px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;margin:4px auto 10px}
+.ok-check svg{width:32px;height:32px}
+.code-box{background:var(--blush);border-radius:16px;padding:18px}
+.code-box .lbl{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--olive);font-weight:700}
+.code-box .code{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--ink);letter-spacing:.06em;margin:4px 0 12px}
+.btn.sm{padding:8px 16px;font-size:12.5px}
+.track-row{display:flex;gap:10px}
+.track-row input{flex:1}
+.trk-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.trk-code{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:.05em}
+.trk-status-pill{background:var(--pink);color:#fff;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:5px 12px;border-radius:999px}
+.trk-status-pill.cancelled{background:var(--ink)}
+.trk-meta{font-size:12px;color:var(--muted);margin-bottom:16px}
+.trk-note{background:var(--blush);border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:18px}
+.trk-note b{color:var(--pink-deep)}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:0 0 20px 34px}
+.steps li:before{content:'';position:absolute;left:9px;top:20px;bottom:0;width:2px;background:var(--line)}
+.steps li:last-child:before{display:none}
+.steps .dot{position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:#fff}
+.steps li.done .dot{background:var(--pink);border-color:var(--pink)}
+.steps li.done .dot:after{content:'';position:absolute;inset:0;background:no-repeat center/12px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")}
+.steps li.current .dot{border-color:var(--pink);box-shadow:0 0 0 4px var(--blush)}
+.steps .s-name{font-weight:600;font-size:14px}
+.steps li.pending .s-name{color:var(--muted)}
+.steps .s-sub{font-size:11.5px;color:var(--muted)}
+.trk-empty{text-align:center;color:var(--muted);font-size:13.5px;padding:6px 0}
 .pd-desc{color:var(--ink-soft);font-size:14.5px;margin:18px 0;line-height:1.65}
 .sizes-lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;font-weight:600}
 .sizes-lbl .cn{font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}
@@ -302,6 +342,8 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
 </style>
 </head>
 <body>
+
+<div class="flashstrip" id="flashStrip"></div>
 
 <!-- TOP BAR -->
 <header class="topbar">
@@ -396,6 +438,8 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
     <div>
       <h4>Shop</h4>
       <ul id="footCats"></ul>
+      <h4 style="margin-top:22px">Orders</h4>
+      <ul><li><a href="#" onclick="openTrack();return false;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 12h18M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/></svg> Track your order</a></li></ul>
     </div>
     <div>
       <h4>Contact</h4>
@@ -430,8 +474,8 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
 <!-- CHECKOUT MODAL -->
 <div class="modal" id="coModal" aria-label="Checkout">
   <div class="modal-card narrow">
-    <div class="admin-head"><h2>Checkout</h2><button class="closex" data-close="co"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
-    <div class="admin-body">
+    <div class="admin-head"><h2 id="coTitle">Checkout</h2><button class="closex" data-close="co"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="admin-body" id="coForm">
       <p style="margin:0 0 18px;color:var(--muted);font-size:13.5px">Fill in your details and we’ll open WhatsApp with your full order ready to send. Payment &amp; delivery are arranged directly with our team.</p>
       <div class="field"><label>Full name</label><input id="coName" placeholder="Ada Obi" /></div>
       <div class="field"><label>Phone number</label><input id="coPhone" placeholder="080…" inputmode="tel" /></div>
@@ -443,7 +487,30 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
       </button>
       <div class="note-line">You’ll be redirected to WhatsApp. Nothing is charged here.</div>
     </div>
+    <div class="admin-body" id="coDone" style="display:none;text-align:center">
+      <div class="ok-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3 class="serif" style="font-size:26px;margin:6px 0 4px">Order sent!</h3>
+      <p style="color:var(--muted);font-size:13.5px;margin:0 0 16px">Finish sending the message on WhatsApp to confirm. Keep your tracking code to follow your package.</p>
+      <div class="code-box"><span class="lbl">Your tracking code</span><div class="code" id="coCode">NE-XXXXXX</div><button class="btn btn-ghost sm" id="coCopy">Copy code</button></div>
+      <button class="btn btn-primary block" style="margin-top:16px" onclick="closeAll();openTrack(document.getElementById('coCode').textContent)">Track my order</button>
+    </div>
   </div>
+</div>
+
+<!-- TRACK ORDER MODAL -->
+<div class="modal" id="trackModal" aria-label="Track order">
+  <div class="modal-card narrow">
+    <div class="admin-head"><h2>Track your order</h2><button class="closex" data-close="track"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="admin-body">
+      <p style="margin:0 0 14px;color:var(--muted);font-size:13.5px">Enter the tracking code from your order (looks like <b>NE-8F3KD</b>).</p>
+      <div class="track-row">
+        <input id="trackCode" placeholder="NE-XXXXXX" autocomplete="off" style="text-transform:uppercase" />
+        <button class="btn btn-primary" id="trackBtn">Track</button>
+      </div>
+      <div id="trackResult" style="margin-top:20px"></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- TOAST -->
@@ -465,7 +532,25 @@ const sb = supabase.createClient(SB_URL, SB_KEY);
 function rowToProduct(r){
   return { id:r.id, name:r.name, price:Number(r.price)||0, cat:r.cat, gender:r.gender,
            sizes:Array.isArray(r.sizes)?r.sizes:[], desc:r.description||'',
-           new:!!r.is_new, variants:Array.isArray(r.variants)?r.variants:[] };
+           new:!!r.is_new, variants:Array.isArray(r.variants)?r.variants:[],
+           salePrice: (r.sale_price!==null && r.sale_price!==undefined) ? Number(r.sale_price) : null,
+           saleEnds: r.sale_ends || null };
+}
+// flash-sale helpers
+function saleActive(p){
+  if(p.salePrice===null || p.salePrice===undefined) return false;
+  if(!(p.salePrice < p.price)) return false;
+  if(p.saleEnds){ return new Date(p.saleEnds).getTime() > Date.now(); }
+  return true;
+}
+function effPrice(p){ return saleActive(p) ? p.salePrice : p.price; }
+function salePct(p){ return Math.round((1 - p.salePrice/p.price)*100); }
+function countdown(ms){
+  if(ms<=0) return "0s";
+  const s=Math.floor(ms/1000), d=Math.floor(s/86400), h=Math.floor(s%86400/3600), m=Math.floor(s%3600/60), sec=s%60;
+  if(d>0) return `${d}d ${h}h ${m}m`;
+  if(h>0) return `${h}h ${m}m ${sec}s`;
+  return `${m}m ${sec}s`;
 }
 const CATEGORIES = ["New In","Clothing","Accessories","Lifestyle"];
 const DEPARTMENTS = ["Everyone","Women","Men"];
@@ -584,20 +669,31 @@ function renderGrid(){
     grid.innerHTML = `<div class="empty"><div class="serif">Nothing here yet</div><p>Try another department or category.</p></div>`;
     return;
   }
-  grid.innerHTML = list.map(p=>`
+  grid.innerHTML = list.map(p=>{
+    const onSale = saleActive(p);
+    const badges = (p.new?'<span class="badge new">New</span>':'') +
+                   (onSale?`<span class="badge sale${p.new?' stack':''}">-${salePct(p)}%</span>`:'');
+    const priceHtml = onSale
+      ? `<span class="was">${money(p.price)}</span><span class="now">${money(p.salePrice)}</span><span class="add">Add +</span>`
+      : `${money(p.price)}<span class="add">Add +</span>`;
+    const timer = (onSale && p.saleEnds)
+      ? `<div class="timer" data-sale-ends="${p.saleEnds}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span class="cd">${countdown(new Date(p.saleEnds)-Date.now())} left</span></div>`
+      : '';
+    return `
     <article class="card" data-id="${p.id}">
       <div class="imgwrap">
-        ${p.new?'<span class="badge new">New</span>':''}
+        ${badges}
         <img src="${p.img}" alt="${escapeAttr(p.name)}" loading="lazy" onerror="this.src='${placeholder(p.name,p.cat)}'"/>
         <div class="quick">View details</div>
       </div>
       <div class="meta">
         <div class="cat">${escapeAttr(catLabel(p))}</div>
         <div class="nm">${escapeAttr(p.name)}</div>
-        <div class="pr">${money(p.price)}<span class="add">Add +</span></div>
+        <div class="pr">${priceHtml}</div>
+        ${timer}
         ${p.variants && p.variants.length>1 ? `<div class="cols">${p.variants.length} colours</div>` : ''}
       </div>
-    </article>`).join('');
+    </article>`;}).join('');
   grid.querySelectorAll('.card').forEach(c=>{
     const p = PRODUCTS.find(x=>x.id===c.dataset.id);
     c.querySelector('.add').onclick = e=>{ e.stopPropagation(); quickAdd(p); };
@@ -637,7 +733,8 @@ function openProduct(p){
         <button class="closex" data-close="pd" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <h2>${escapeAttr(p.name)}</h2>
-      <div class="pd-price">${money(p.price)}</div>
+      <div class="pd-price">${saleActive(p)?`<span class="was">${money(p.price)}</span>${money(p.salePrice)}`:money(p.price)}</div>
+      ${saleActive(p)?`<div class="pd-sale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h8l8.6 8.6a1 1 0 0 1 0 1.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg><span>Save ${salePct(p)}%${p.saleEnds?` · <b class="cd" data-sale-ends="${p.saleEnds}">${countdown(new Date(p.saleEnds)-Date.now())} left</b>`:''}</span></div>`:''}
       <p class="pd-desc">${escapeAttr(p.desc||'')}</p>
       ${colourBlock}
       <div class="sizes-lbl">Select size</div>
@@ -676,7 +773,7 @@ function addToCart(p,size,color,img){
   const key = p.id+'|'+size+'|'+(color||'');
   const found = CART.find(i=>i.key===key);
   if(found) found.qty++;
-  else CART.push({key,id:p.id,name:p.name,price:p.price,img:img||p.img,cat:p.cat,gender:p.gender,size,color:color||'',qty:1});
+  else CART.push({key,id:p.id,name:p.name,price:effPrice(p),wasPrice:saleActive(p)?p.price:null,img:img||p.img,cat:p.cat,gender:p.gender,size,color:color||'',qty:1});
   saveCart(); renderCart();
 }
 function setQty(key,delta){
@@ -728,11 +825,11 @@ function renderCart(){
       Checkout on WhatsApp
     </button>
     <div class="note-line">No payment is taken here — you’ll finalise your order and delivery with our team on WhatsApp.</div>`;
-  document.getElementById('toCheckout').onclick=()=>{ closeAll(); showModal('coModal'); };
+  document.getElementById('toCheckout').onclick=()=>{ closeAll(); openCheckout(); };
 }
 
 /* ---------- checkout -> whatsapp ---------- */
-function buildOrderMessage(){
+function buildOrderMessage(code){
   const name = document.getElementById('coName').value.trim();
   const phone = document.getElementById('coPhone').value.trim();
   const addr = document.getElementById('coAddr').value.trim();
@@ -742,16 +839,100 @@ function buildOrderMessage(){
   msg += `\nSubtotal: ${money(cartTotal())}\n`;
   msg += `\n— My details —\nName: ${name||'-'}\nPhone: ${phone||'-'}\nAddress: ${addr||'-'}`;
   if(note) msg += `\nNote: ${note}`;
+  if(code) msg += `\n\nTracking code: ${code}`;
   return msg;
 }
-document.getElementById('coSend').onclick = ()=>{
+function genTracking(){
+  const a='ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s='';
+  for(let i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)];
+  return 'NE-'+s;
+}
+document.getElementById('coSend').onclick = async ()=>{
   if(!CART.length){ toast('Your bag is empty'); return; }
-  if(!document.getElementById('coName').value.trim()){ toast('Please add your name'); document.getElementById('coName').focus(); return; }
-  const url = `https://wa.me/${CONFIG.whatsapp}?text=`+encodeURIComponent(buildOrderMessage());
+  const name = document.getElementById('coName').value.trim();
+  if(!name){ toast('Please add your name'); document.getElementById('coName').focus(); return; }
+  const code = genTracking();
+  // open WhatsApp first (must stay inside the click gesture)
+  const url = `https://wa.me/${CONFIG.whatsapp}?text=`+encodeURIComponent(buildOrderMessage(code));
   window.open(url,'_blank');
-  closeAll();
-  toast('Opening WhatsApp…');
+  // record the order for tracking (best-effort)
+  const order = {
+    tracking_code: code,
+    customer_name: name,
+    customer_phone: document.getElementById('coPhone').value.trim(),
+    address: document.getElementById('coAddr').value.trim(),
+    items: CART.map(i=>({name:i.name,color:i.color,size:i.size,qty:i.qty,price:i.price})),
+    total: cartTotal(),
+    status: 'Order received'
+  };
+  try { await sb.from('orders').insert(order); } catch(e){ console.warn('order save failed', e); }
+  // show success state
+  document.getElementById('coCode').textContent = code;
+  document.getElementById('coForm').style.display = 'none';
+  document.getElementById('coDone').style.display = 'block';
+  document.getElementById('coTitle').textContent = 'Thank you';
+  CART = []; saveCart(); renderCart();
 };
+document.getElementById('coCopy').onclick = ()=>{
+  const code = document.getElementById('coCode').textContent;
+  navigator.clipboard?.writeText(code).then(()=>toast('Code copied'), ()=>toast(code));
+};
+function openCheckout(){
+  document.getElementById('coForm').style.display = 'block';
+  document.getElementById('coDone').style.display = 'none';
+  document.getElementById('coTitle').textContent = 'Checkout';
+  showModal('coModal');
+}
+
+/* ---------- order tracking ---------- */
+const TRACK_STEPS = ["Order received","Preparing","Shipped","Out for delivery","Delivered"];
+function openTrack(prefill){
+  document.getElementById('trackResult').innerHTML = '';
+  const inp = document.getElementById('trackCode');
+  inp.value = prefill || '';
+  showModal('trackModal');
+  if(prefill) doTrack(); else setTimeout(()=>inp.focus(),150);
+}
+async function doTrack(){
+  const code = document.getElementById('trackCode').value.trim().toUpperCase();
+  const box = document.getElementById('trackResult');
+  if(!code){ box.innerHTML = `<div class="trk-empty">Please enter your tracking code.</div>`; return; }
+  box.innerHTML = `<div class="trk-empty">Looking up your order…</div>`;
+  let row=null, err=null;
+  try{
+    const r = await sb.rpc('track_order',{code});
+    if(r.error) err=r.error; else row = Array.isArray(r.data)?r.data[0]:r.data;
+  }catch(e){ err=e; }
+  if(err){ box.innerHTML = `<div class="trk-empty">We couldn't reach the tracking service. Please try again shortly.</div>`; return; }
+  if(!row){ box.innerHTML = `<div class="trk-empty">No order found for <b>${code}</b>. Please check the code and try again.</div>`; return; }
+  renderTrack(row);
+}
+function renderTrack(o){
+  const cancelled = (o.status||'').toLowerCase()==='cancelled';
+  const idx = TRACK_STEPS.indexOf(o.status);
+  const upd = o.updated_at ? new Date(o.updated_at) : (o.created_at?new Date(o.created_at):null);
+  const fmt = d => d ? d.toLocaleDateString('en-NG',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'}) : '';
+  let steps = '';
+  if(cancelled){
+    steps = `<li class="current"><span class="dot"></span><div class="s-name">Order cancelled</div><div class="s-sub">${fmt(upd)}</div></li>`;
+  } else {
+    steps = TRACK_STEPS.map((s,i)=>{
+      const cls = i<idx ? 'done' : (i===idx ? 'done current' : 'pending');
+      const sub = i===idx ? `<div class="s-sub">Updated ${fmt(upd)}</div>` : '';
+      return `<li class="${cls}"><span class="dot"></span><div class="s-name">${s}</div>${sub}</li>`;
+    }).join('');
+  }
+  const first = o.customer_first ? o.customer_first+'’s order' : 'Your order';
+  document.getElementById('trackResult').innerHTML = `
+    <div class="trk-head">
+      <div><div class="trk-code">${o.tracking_code}</div><div style="font-size:12px;color:var(--muted)">${first} · ${o.item_count||0} item${(o.item_count||0)!==1?'s':''} · ${money(o.total||0)}</div></div>
+      <span class="trk-status-pill ${cancelled?'cancelled':''}">${o.status||'—'}</span>
+    </div>
+    ${o.status_note?`<div class="trk-note"><b>Update:</b> ${escapeAttr(o.status_note)}</div>`:''}
+    <ul class="steps">${steps}</ul>`;
+}
+document.getElementById('trackBtn').onclick = doTrack;
+document.getElementById('trackCode').addEventListener('keydown',e=>{ if(e.key==='Enter') doTrack(); });
 
 /* =========================================================
    modal / drawer plumbing
@@ -788,7 +969,42 @@ async function boot(){
   }catch(e){ /* offline, or Supabase not set up yet */ }
   PRODUCTS = (live || seed()).map(normalizeProduct);   // fall back to sample pieces
   renderCats(); renderGrid(); renderCart();
+  tickSales();
 }
+
+/* live flash-sale countdowns + top strip, updated every second */
+function tickSales(){
+  const now = Date.now();
+  let expired = false;
+  // update every countdown span
+  document.querySelectorAll('[data-sale-ends]').forEach(el=>{
+    const ends = new Date(el.getAttribute('data-sale-ends')).getTime();
+    const cd = el.matches('.cd') ? el : el.querySelector('.cd');
+    const left = ends - now;
+    if(left <= 0){ expired = true; }
+    else if(cd){ cd.textContent = countdown(left) + ' left'; }
+  });
+  // if any sale just ended, re-render grid (prices revert automatically)
+  if(expired){ renderGrid(); }
+  // drive the top flash strip: soonest active timed sale
+  const strip = document.getElementById('flashStrip');
+  if(strip && typeof PRODUCTS !== 'undefined'){
+    let soonest = null;
+    PRODUCTS.forEach(p=>{
+      if(saleActive(p) && p.saleEnds){
+        const t = new Date(p.saleEnds).getTime();
+        if(t>now && (soonest===null || t<soonest)) soonest = t;
+      }
+    });
+    if(soonest){
+      strip.classList.add('show');
+      strip.innerHTML = `⚡ FLASH SALE — limited-time prices end in <b>${countdown(soonest-now)}</b> ⚡`;
+    } else {
+      strip.classList.remove('show'); strip.innerHTML='';
+    }
+  }
+}
+setInterval(tickSales, 1000);
 boot();
 </script>
 <script>
