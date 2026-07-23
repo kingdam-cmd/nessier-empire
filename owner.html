@@ -35,7 +35,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0
 .shell{max-width:820px;margin:22px auto;padding:0 18px 60px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:22px}
 .tabbar{display:flex;gap:4px;background:var(--mist);border-radius:999px;padding:4px;margin-bottom:22px}
-.tabbar button{flex:1;padding:11px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);transition:.14s}
+.tabbar button{flex:1;padding:11px 6px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--muted);transition:.14s;white-space:nowrap}
 .tabbar button.active{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
 
 .field{margin-bottom:16px}
@@ -123,6 +123,23 @@ h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0
 .ordctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
 .ordctl select{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:600;background:#fff;min-width:150px}
 .ordctl input{flex:1;min-width:180px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px}
+/* size chart editor */
+.sgunit{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;font-weight:600;margin-bottom:20px}
+.seg{display:inline-flex;background:var(--mist);border-radius:999px;padding:4px;gap:2px}
+.seg button{border:none;background:none;cursor:pointer;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--muted);font-family:inherit;transition:.14s}
+.seg button.active{background:var(--pink);color:#fff}
+.sgcat{margin-bottom:24px}
+.sgcat-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin:0 0 12px}
+.sgrow{display:grid;grid-template-columns:1fr 1.2fr 1.2fr 1.2fr 28px;gap:8px;align-items:center;margin-bottom:8px}
+.sgrow input{padding:10px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;width:100%}
+.sgrow.sghead{margin-bottom:6px}
+.sghead .sgsize-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-left:4px}
+.sgh{font-weight:700;background:var(--mist)!important;text-align:center}
+.sgsize{font-weight:700;text-align:center}
+.sgval{text-align:center}
+.sgrm{border:none;background:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;width:28px}
+.sgrm:hover{color:#d33}
+@media(max-width:560px){.sgrow{grid-template-columns:.8fr 1fr 1fr 1fr 24px;gap:5px}.sgrow input{padding:8px 6px;font-size:12px}}
 @media(max-width:560px){.field-row{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -158,6 +175,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0
       <button data-tab="add" id="tabAdd" class="active">Add product</button>
       <button data-tab="list" id="tabList">Products (<span id="cnt">0</span>)</button>
       <button data-tab="orders" id="tabOrders">Orders</button>
+      <button data-tab="size" id="tabSize">Sizes</button>
     </div>
     <div id="pane"></div>
   </div>
@@ -277,10 +295,12 @@ function render(){
   document.getElementById('tabAdd').classList.toggle('active', tab==='add');
   document.getElementById('tabList').classList.toggle('active', tab==='list');
   document.getElementById('tabOrders').classList.toggle('active', tab==='orders');
+  document.getElementById('tabSize').classList.toggle('active', tab==='size');
   document.getElementById('tabAdd').textContent = editingId ? 'Edit product' : 'Add product';
   const pane = document.getElementById('pane');
   if(tab==='add'){ pane.innerHTML = formHTML(editingId?PRODUCTS.find(p=>p.id===editingId):null); wireForm(); }
   else if(tab==='orders'){ renderOrders(); }
+  else if(tab==='size'){ loadSizeEditor(); }
   else { pane.innerHTML = listHTML(); wireList(); }
 }
 function formHTML(p){
@@ -411,6 +431,96 @@ function exportBackup(){
 document.getElementById('tabAdd').onclick=()=>{ tab='add'; render(); };
 document.getElementById('tabList').onclick=()=>{ editingId=null; draftVariants=[]; tab='list'; render(); };
 document.getElementById('tabOrders').onclick=()=>{ editingId=null; draftVariants=[]; tab='orders'; render(); };
+document.getElementById('tabSize').onclick=()=>{ editingId=null; draftVariants=[]; tab='size'; render(); };
+
+/* ---- size guide editor ---- */
+const SG_DEFAULT = {
+  unit:'cm',
+  women:{ cols:["Bust","Waist","Hip"], rows:[
+    ["XS","79-81","61-64","86-89"],["S","84-86","66-69","91-94"],["M","89-91","71-74","97-99"],
+    ["L","94-99","76-81","102-107"],["XL","102-107","84-89","109-114"],["XXL","109-114","91-97","117-122"]
+  ]},
+  men:{ cols:["Chest","Waist","Hip"], rows:[
+    ["S","89-94","74-79","89-94"],["M","97-102","81-86","97-102"],["L","104-109","89-94","104-109"],
+    ["XL","112-117","97-102","112-117"],["XXL","119-124","104-109","119-124"]
+  ]}
+};
+let sgEdit = null;
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+async function loadSizeEditor(){
+  const pane=document.getElementById('pane');
+  pane.innerHTML=`<div class="loading">Loading size chart…</div>`;
+  try{
+    const { data, error } = await sb.from('settings').select('value').eq('key','size_guide').maybeSingle();
+    if(error) throw error;
+    sgEdit = (data && data.value && data.value.women && data.value.men) ? clone(data.value) : clone(SG_DEFAULT);
+  }catch(e){
+    pane.innerHTML=`<div class="empty"><div class="serif">Couldn’t load the size chart</div><p>${escapeAttr(e.message||'')}</p><p class="hint" style="margin-top:8px">If this is the first time, make sure you’ve run the size-guide database step.</p></div>`;
+    return;
+  }
+  if(!sgEdit.unit) sgEdit.unit='cm';
+  renderSizeEditor();
+}
+function catEditorHTML(catKey, title){
+  const g = sgEdit[catKey];
+  const heads = g.cols.map((c,ci)=>`<input class="sgh" data-col="${catKey}" data-ci="${ci}" value="${escapeAttr(c)}" placeholder="Measurement"/>`).join('');
+  const rows = g.rows.map((r,ri)=>`
+    <div class="sgrow">
+      <input class="sgsize" data-cat="${catKey}" data-ri="${ri}" data-field="label" value="${escapeAttr(r[0]||'')}" placeholder="Size"/>
+      ${[1,2,3].map(vi=>`<input class="sgval" data-cat="${catKey}" data-ri="${ri}" data-vi="${vi}" value="${escapeAttr(r[vi]||'')}" placeholder="e.g. 84-86"/>`).join('')}
+      <button class="sgrm" data-rm="${catKey}" data-ri="${ri}" title="Remove size" ${g.rows.length<=1?'style="visibility:hidden"':''}>×</button>
+    </div>`).join('');
+  return `
+    <div class="sgcat">
+      <h3 class="sgcat-title">${title}</h3>
+      <div class="sgrow sghead">
+        <div class="sgsize-lbl">Size</div>${heads}
+        <span style="width:28px"></span>
+      </div>
+      ${rows}
+      <button class="addvar" data-add="${catKey}">+ Add a size</button>
+    </div>`;
+}
+function renderSizeEditor(){
+  const pane=document.getElementById('pane');
+  pane.innerHTML = `
+    <div class="live"><b>Your size chart.</b> Enter measurements in whichever unit you use — your shop shows customers both cm and inches automatically. Changes go live on the shop when you press Save.</div>
+    <div class="sgunit">
+      <span>I’m entering measurements in:</span>
+      <div class="seg" id="sgUnitSel">
+        <button data-u="cm" class="${sgEdit.unit==='cm'?'active':''}">Centimetres</button>
+        <button data-u="in" class="${sgEdit.unit==='in'?'active':''}">Inches</button>
+      </div>
+    </div>
+    ${catEditorHTML('women','Women')}
+    ${catEditorHTML('men','Men')}
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-primary block" id="sgSave">Save size chart</button>
+      <button class="btn btn-ghost" id="sgReset">Reset to standard</button>
+    </div>
+    <p class="hint" style="margin-top:12px">Tip: enter each measurement as a range like <b>84-86</b> (or a single number). Use the same three measurements down the top for every size.</p>`;
+  wireSizeEditor();
+}
+function wireSizeEditor(){
+  const pane=document.getElementById('pane');
+  pane.querySelectorAll('#sgUnitSel button').forEach(b=>b.onclick=()=>{ sgEdit.unit=b.dataset.u; renderSizeEditor(); });
+  pane.querySelectorAll('.sgh').forEach(inp=>inp.oninput=()=>{ sgEdit[inp.dataset.col].cols[+inp.dataset.ci]=inp.value; });
+  pane.querySelectorAll('.sgsize').forEach(inp=>inp.oninput=()=>{ sgEdit[inp.dataset.cat].rows[+inp.dataset.ri][0]=inp.value; });
+  pane.querySelectorAll('.sgval').forEach(inp=>inp.oninput=()=>{ sgEdit[inp.dataset.cat].rows[+inp.dataset.ri][+inp.dataset.vi]=inp.value; });
+  pane.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ sgEdit[b.dataset.rm].rows.splice(+b.dataset.ri,1); if(!sgEdit[b.dataset.rm].rows.length) sgEdit[b.dataset.rm].rows.push(['','','','']); renderSizeEditor(); });
+  pane.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ sgEdit[b.dataset.add].rows.push(['','','','']); renderSizeEditor(); });
+  document.getElementById('sgSave').onclick=saveSizeGuide;
+  document.getElementById('sgReset').onclick=()=>{ if(confirm('Reset the size chart back to the standard sizes?')){ sgEdit=clone(SG_DEFAULT); renderSizeEditor(); toast('Reset — press Save to publish'); } };
+}
+async function saveSizeGuide(){
+  // clean up empty rows
+  ['women','men'].forEach(k=>{ sgEdit[k].rows = sgEdit[k].rows.filter(r=>(r[0]||'').trim()!==''); if(!sgEdit[k].rows.length) sgEdit[k].rows=clone(SG_DEFAULT[k].rows); });
+  const btn=document.getElementById('sgSave'); btn.disabled=true; btn.textContent='Saving…';
+  const { error } = await sb.from('settings').upsert({ key:'size_guide', value:sgEdit, updated_at:new Date().toISOString() });
+  btn.disabled=false; btn.textContent='Save size chart';
+  if(error){ toast('Could not save: '+error.message, true); return; }
+  toast('Size chart saved — live on your shop now');
+}
 
 /* ---- orders / package tracking ---- */
 let ORDERS = [];
