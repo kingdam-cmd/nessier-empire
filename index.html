@@ -253,6 +253,32 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
 .steps li.pending .s-name{color:var(--muted)}
 .steps .s-sub{font-size:11.5px;color:var(--muted)}
 .trk-empty{text-align:center;color:var(--muted);font-size:13.5px;padding:6px 0}
+/* size guide */
+.sizeguide-link{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--pink-deep);font-size:12.5px;font-weight:600;cursor:pointer;letter-spacing:.01em}
+.sizeguide-link svg{width:15px;height:15px}
+.sizes-lbl-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sg-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sg-tabs,.sg-units{display:inline-flex;background:var(--blush);border-radius:999px;padding:4px;gap:2px}
+.sg-tabs button,.sg-units button{border:none;background:none;cursor:pointer;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink);transition:.14s;font-family:inherit}
+.sg-units button{padding:8px 14px}
+.sg-tabs button.active,.sg-units button.active{background:var(--pink);color:#fff}
+.sg-tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+.sg-table{width:100%;border-collapse:collapse;font-size:13px;min-width:340px}
+.sg-table th,.sg-table td{padding:11px 12px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.sg-table thead th{background:var(--ink);color:#fff;font-size:12px;letter-spacing:.04em;font-weight:600}
+.sg-table thead th:first-child{border-top-left-radius:13px}
+.sg-table thead th:last-child{border-top-right-radius:13px}
+.sg-table tbody tr:last-child td{border-bottom:none}
+.sg-table td:first-child,.sg-table th:first-child{text-align:left;font-weight:700;background:var(--mist)}
+.sg-table tbody tr:nth-child(even) td:not(:first-child){background:#fcfafb}
+.sg-hint{font-size:11.5px;color:var(--muted);margin:10px 2px 0;text-align:center}
+.sg-measure{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.sg-measure h4{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;margin:0 0 10px}
+.sg-measure ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.sg-measure li{font-size:13px;color:#444;padding-left:26px;position:relative;line-height:1.5}
+.sg-measure li b{color:var(--ink)}
+.sg-measure li:before{content:'';position:absolute;left:0;top:2px;width:16px;height:16px;border-radius:50%;background:var(--blush);border:2px solid var(--pink)}
+.sg-tip{font-size:12px;color:var(--muted);margin:14px 0 0;background:var(--blush);border-radius:10px;padding:10px 12px}
 .pd-desc{color:var(--ink-soft);font-size:14.5px;margin:18px 0;line-height:1.65}
 .sizes-lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;font-weight:600}
 .sizes-lbl .cn{font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}
@@ -439,7 +465,8 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
       <h4>Shop</h4>
       <ul id="footCats"></ul>
       <h4 style="margin-top:22px">Orders</h4>
-      <ul><li><a href="#" onclick="openTrack();return false;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 12h18M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/></svg> Track your order</a></li></ul>
+      <ul><li><a href="#" onclick="openTrack();return false;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 12h18M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/></svg> Track your order</a></li>
+      <li><a href="#" onclick="openSizeGuide();return false;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18v10H3z"/><path d="M7 7v4M11 7v6M15 7v4M19 7v6"/></svg> Size guide</a></li></ul>
     </div>
     <div>
       <h4>Contact</h4>
@@ -511,6 +538,32 @@ footer{background:var(--ink);color:#cfcdd6;margin-top:20px}
     </div>
   </div>
 </div>
+</div>
+
+<!-- SIZE GUIDE MODAL -->
+<div class="modal" id="sizeModal" aria-label="Size guide">
+  <div class="modal-card narrow">
+    <div class="admin-head"><h2>Size guide</h2><button class="closex" data-close="size"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="admin-body">
+      <div class="sg-controls">
+        <div class="sg-tabs" id="sgTabs">
+          <button data-cat="Women" class="active">Women</button>
+          <button data-cat="Men">Men</button>
+        </div>
+        <div class="sg-units" id="sgUnits">
+          <button data-unit="cm" class="active">cm</button>
+          <button data-unit="in">inches</button>
+        </div>
+      </div>
+      <div class="sg-tablewrap"><table class="sg-table" id="sgTable"></table></div>
+      <p class="sg-hint" id="sgHint"></p>
+      <div class="sg-measure">
+        <h4>How to measure</h4>
+        <ul id="sgMeasure"></ul>
+        <p class="sg-tip">Tip: keep the tape snug but not tight, and measure over light clothing. If you're between two sizes, size up for a relaxed fit.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- TOAST -->
@@ -737,7 +790,7 @@ function openProduct(p){
       ${saleActive(p)?`<div class="pd-sale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h8l8.6 8.6a1 1 0 0 1 0 1.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg><span>Save ${salePct(p)}%${p.saleEnds?` · <b class="cd" data-sale-ends="${p.saleEnds}">${countdown(new Date(p.saleEnds)-Date.now())} left</b>`:''}</span></div>`:''}
       <p class="pd-desc">${escapeAttr(p.desc||'')}</p>
       ${colourBlock}
-      <div class="sizes-lbl">Select size</div>
+      <div class="sizes-lbl sizes-lbl-row"><span>Select size</span><button type="button" class="sizeguide-link" onclick="openSizeGuide('${(p.gender==='Men')?'Men':'Women'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18v10H3z"/><path d="M7 7v4M11 7v6M15 7v4M19 7v6"/></svg> Size guide</button></div>
       <div class="sizes" id="pdSizes">
         ${(p.sizes&&p.sizes.length?p.sizes:['One Size']).map(s=>`<button class="size ${pdSize===s?'sel':''}" data-s="${escapeAttr(s)}">${escapeAttr(s)}</button>`).join('')}
       </div>
@@ -933,6 +986,59 @@ function renderTrack(o){
 }
 document.getElementById('trackBtn').onclick = doTrack;
 document.getElementById('trackCode').addEventListener('keydown',e=>{ if(e.key==='Enter') doTrack(); });
+
+/* ---------- size guide ---------- */
+const SIZE_GUIDE = {
+  Women: {
+    cols: ["Size","Bust","Waist","Hip"],
+    rows: [
+      ["XS",  {cm:"79–81",  in:"31–32"}, {cm:"61–64",  in:"24–25"}, {cm:"86–89",  in:"34–35"}],
+      ["S",   {cm:"84–86",  in:"33–34"}, {cm:"66–69",  in:"26–27"}, {cm:"91–94",  in:"36–37"}],
+      ["M",   {cm:"89–91",  in:"35–36"}, {cm:"71–74",  in:"28–29"}, {cm:"97–99",  in:"38–39"}],
+      ["L",   {cm:"94–99",  in:"37–39"}, {cm:"76–81",  in:"30–32"}, {cm:"102–107",in:"40–42"}],
+      ["XL",  {cm:"102–107",in:"40–42"}, {cm:"84–89",  in:"33–35"}, {cm:"109–114",in:"43–45"}],
+      ["XXL", {cm:"109–114",in:"43–45"}, {cm:"91–97",  in:"36–38"}, {cm:"117–122",in:"46–48"}]
+    ],
+    measure: [
+      ["Bust","measure around the fullest part of your bust, keeping the tape level."],
+      ["Waist","measure around your natural waistline — the narrowest part."],
+      ["Hip","measure around the fullest part of your hips."]
+    ]
+  },
+  Men: {
+    cols: ["Size","Chest","Waist","Hip"],
+    rows: [
+      ["S",   {cm:"89–94",  in:"35–37"}, {cm:"74–79",  in:"29–31"}, {cm:"89–94",  in:"35–37"}],
+      ["M",   {cm:"97–102", in:"38–40"}, {cm:"81–86",  in:"32–34"}, {cm:"97–102", in:"38–40"}],
+      ["L",   {cm:"104–109",in:"41–43"}, {cm:"89–94",  in:"35–37"}, {cm:"104–109",in:"41–43"}],
+      ["XL",  {cm:"112–117",in:"44–46"}, {cm:"97–102", in:"38–40"}, {cm:"112–117",in:"44–46"}],
+      ["XXL", {cm:"119–124",in:"47–49"}, {cm:"104–109",in:"41–43"}, {cm:"119–124",in:"47–49"}]
+    ],
+    measure: [
+      ["Chest","measure around the fullest part of your chest, under the arms."],
+      ["Waist","measure around your natural waistline, where you normally wear your trousers."],
+      ["Hip","measure around the fullest part of your seat."]
+    ]
+  }
+};
+let sgCat = 'Women', sgUnit = 'cm';
+function renderSizeChart(){
+  const g = SIZE_GUIDE[sgCat];
+  const head = `<thead><tr>${g.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>`;
+  const body = `<tbody>${g.rows.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(cell=>`<td>${cell[sgUnit]}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  document.getElementById('sgTable').innerHTML = head + body;
+  document.getElementById('sgHint').textContent = `All measurements are body measurements in ${sgUnit==='cm'?'centimetres':'inches'}. Compare with a garment you own for the best fit.`;
+  document.getElementById('sgMeasure').innerHTML = g.measure.map(m=>`<li><b>${m[0]}:</b> ${m[1]}</li>`).join('');
+  document.querySelectorAll('#sgTabs button').forEach(b=>b.classList.toggle('active', b.dataset.cat===sgCat));
+  document.querySelectorAll('#sgUnits button').forEach(b=>b.classList.toggle('active', b.dataset.unit===sgUnit));
+}
+function openSizeGuide(cat){
+  if(cat && SIZE_GUIDE[cat]) sgCat = cat;
+  renderSizeChart();
+  showModal('sizeModal');
+}
+document.querySelectorAll('#sgTabs button').forEach(b=>b.onclick=()=>{ sgCat=b.dataset.cat; renderSizeChart(); });
+document.querySelectorAll('#sgUnits button').forEach(b=>b.onclick=()=>{ sgUnit=b.dataset.unit; renderSizeChart(); });
 
 /* =========================================================
    modal / drawer plumbing
